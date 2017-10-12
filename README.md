@@ -2,7 +2,6 @@
 
 Repression Network is a multi-task learning framework designed for precise image retrieval tasks. More details, please refer to [our paper](https://arxiv.org/abs/1708.02386).
 
-![Image 0](model.png)
 ![Image 1](rf1.png)
 ## Datasets
 The vehicle dataset we used in this work is the [PKU VehicleID](http://pkuml.org/resources/pku-vehicleid.html). Please contact them for the whole dataset.
