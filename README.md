@@ -12,9 +12,9 @@ The vehicle dataset we used in this work is the [PKU VehicleID](http://pkuml.org
 #### List Files
 - `list.txt`: List of all the training data.
 - Query Lists: 
- - `query_list_all.txt`
- - `query_list_hard.txt`
- - `query_list_random.txt`
+  - `query_list_all.txt`
+  - `query_list_hard.txt`
+  - `query_list_random.txt`
 - We split the training data into training set `train_list.txt` and validation set `test_list.txt`.
 
 #### Helper Scripts
@@ -30,16 +30,16 @@ The vehicle dataset we used in this work is the [PKU VehicleID](http://pkuml.org
 `train_*.prototxt` describes the complete model architecture which we used for training. `deploy_*.prototxt` are the ones we use to generate features with a trained model. 
 
 - Base Models: Designed only for attributes classification. 
- - `v0_1` uses seperate branch/feature for each attribute while 
- - `v0_2` has one feature for all attributes
+  - `v0_1` uses seperate branch/feature for each attribute while 
+  - `v0_2` has one feature for all attributes
 - RepNets: 
 	- `v2` with CRL
 	- `v5` with SRL
 	- `v6` with PRL
 - Comparisons: Use the same convolutional groups as RepNet
- - `v2_cmp` is a similar two stream model as RepNet, but without repression layer in between.
- - `v7` is a simple one stream model, in which all the loss functions are connected to the final FC layer.
- - `v1` is also a onw stream model, but have several previous fully connected (FC) layers concatenated before the embedding being fed into the final triplet loss.
+  - `v2_cmp` is a similar two stream model as RepNet, but without repression layer in between.
+  - `v7` is a simple one stream model, in which all the loss functions are connected to the final FC layer.
+  - `v1` is also a onw stream model, but have several previous fully connected (FC) layers concatenated before the embedding being fed into the final triplet loss.
 
 ## Retrieval Experiments
 After the model is trained to convergence, we will use the deployed models to generate features for each image in the retrieval dataset and the features are used to represent the similarity between images. 
