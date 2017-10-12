@@ -46,7 +46,7 @@ The vehicle dataset we used in this work is the [PKU VehicleID](http://pkuml.org
 After the model is trained to convergence, we will use the deployed models to generate features for each image in the retrieval dataset and the features are used to represent the similarity between images. 
 You can actually generate every kind of feature you want including real features, softmax features and predict lables. Please refer to `gen_*_feature.py`. 
 
-With the features generated, we use $L2$ distance during the search phase. Of course, we support bucket search. You can set the number of neighbor buckets in `search_v3.py`.
+With the features generated, we use L2 distance during the search phase. Of course, we support bucket search. You can set the number of neighbor buckets in `search_v3.py`.
 
 
 ## New Attribute for PKU VehicleID
