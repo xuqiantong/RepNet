@@ -2,6 +2,7 @@
 
 Repression Network is a multi-task learning framework designed for precise image retrieval tasks. More details, please refer to [our paper](https://arxiv.org/abs/1708.02386).
 
+![Image of Yaktocat](rf1.png)
 ## Datasets
 The vehicle dataset we used in this work is the [PKU VehicleID](http://pkuml.org/resources/pku-vehicleid.html). Please contact them for the whole dataset.
 
@@ -24,7 +25,7 @@ The vehicle dataset we used in this work is the [PKU VehicleID](http://pkuml.org
 
 
 ## Models
-[Caffe](http://caffe.berkeleyvision.org) is used in this project. We provide prototxt files which describes model structure and training schemes. One may visulize the model architecture using [Netscope](http://ethereon.github.io/netscope/quickstart.html).
+[Caffe](http://caffe.berkeleyvision.org) is used in this project. You can refer to [my caffe repo](https://github.com/xuqiantong/MyCaffe) which supports triplet loss. We provide prototxt files which describes model structure and training schemes. One may visulize the model architecture using [Netscope](http://ethereon.github.io/netscope/quickstart.html).
 
 #### Models:
 `train_*.prototxt` describes the complete model architecture which we used for training. `deploy_*.prototxt` are the ones we use to generate features with a trained model. 
