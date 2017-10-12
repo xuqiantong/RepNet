@@ -1,0 +1,16 @@
+python search_v2.py \
+    --gpu_id 0 \
+    --query_dir  /media/mmr6-home/lhy/Documents/Data/Vehicles/vehicles_with_plate/cropped_uncovered/ \
+    --query_list /home/xqt/exp/query_3.txt \
+    --siyang_label /home/xqt/exp/siyang_label.txt \
+    --nn_number 1000 \
+    --net_def /home/xqt/exp/deploy_v2.prototxt \
+    --weights /home/xqt/exp_res/v2_iter_212351.caffemodel \
+    --feat fc7_cc \
+    --feat_t fc9_triplet \
+    --begin_loc 1 \
+    --end_loc 2349 \
+    --siyang_feat /home/xqt/features/v2_siyang_2348.fea \
+    --wendeng_feat /home/xqt/features/v2_wendeng_2348.fea \
+    --mAP_path  /home/xqt/essence/V2_2348_3_map.txt \
+    --p@k_path  /home/xqt/essence/V2_2348_3_precision_at_k.txt
