@@ -1,4 +1,4 @@
-name: "VGG_Classification-2-Triplet_v2"
+name: "VGG_Classification-2S-Triplet_v6"
 #train data
 layer{
     name: "data"

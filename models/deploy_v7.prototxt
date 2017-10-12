@@ -1,4 +1,4 @@
-name: "VGG_CNN_M_2048_multi-task"
+name: "v7"
 input: "data"
 input_shape: { dim:1 dim:3 dim:224 dim:224 }
 

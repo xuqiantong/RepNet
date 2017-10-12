@@ -1,21 +1,17 @@
-name: "VGG_Classification-2-Triplet-ID_v3"
+name: "v0"
 input: "data"
 input_shape: { dim:1 dim:3 dim:224 dim:224 }
 
-
-## anchor stream ############################################################
 layer {
   bottom: "data"
   top: "conv1"
   name: "conv1"
   type: "Convolution"
   param {
-    name: "conv1_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
-    name: "conv1_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -67,12 +63,10 @@ layer {
   name: "conv2"
   type: "Convolution"
   param {
-    name: "conv2_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
-    name: "conv2_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -126,12 +120,10 @@ layer {
   name: "conv3"
   type: "Convolution"
   param {
-    name: "conv3_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
-    name: "conv3_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -160,12 +152,10 @@ layer {
   name: "conv4"
   type: "Convolution"
   param {
-    name: "conv4_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
-    name: "conv4_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -194,12 +184,10 @@ layer {
   name: "conv5"
   type: "Convolution"
   param {
-    name: "conv5_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
-    name: "conv5_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -239,12 +227,10 @@ layer {
   name: "fc6"
   type: "InnerProduct"
   param {
-    name: "ip6_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
-    name: "ip6_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -277,16 +263,14 @@ layer {
 }
 layer {
   bottom: "fc6"
-  top: "fc7_org"
-  name: "fc7_org"
+  top: "fc7"
+  name: "fc7"
   type: "InnerProduct"
   param {
-    name: "ip7_org_w"
     lr_mult: 1
     decay_mult: 1
   }
   param {
-    name: "ip7_org_b"
     lr_mult: 2
     decay_mult: 0
   }
@@ -303,196 +287,8 @@ layer {
   }
 }
 layer {
-  bottom: "fc6"
-  top: "fc7_cc"
-  name: "fc7_cc"
-  type: "InnerProduct"
-  param {
-    name: "ip7_cc_w"
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    name: "ip7_cc_b"
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 2048
-    weight_filler {
-      type: "gaussian"
-      std: 0.001
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.0
-    }
-  }
-}
-layer {
-  bottom: "fc7_cc"
-  top: "fc7_cc"
+  bottom: "fc7"
+  top: "fc7"
   name: "relu7"
   type: "ReLU"
 }
-layer {
-  name: "concat"
-  bottom: "fc7_org"
-  bottom: "fc7_cc"
-  top: "fc7_triplet"
-  type: "Concat"
-  concat_param {
-    concat_dim: 1
-  }
-}
-layer {
-  bottom: "fc7_triplet"
-  top: "fc8_triplet"
-  name: "fc8.1_triplet"
-  type: "InnerProduct"
-  param {
-    name: "ip8_triplet_w"
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    name: "ip8_triplet_b"
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 4096
-    weight_filler {
-      type: "gaussian"
-      std: 0.005
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.0
-    }
-  }
-}
-layer {
-  bottom: "fc8_triplet"
-  top: "fc8_triplet"
-  name: "relu8.1"
-  type: "ReLU"
-}
-layer {
-  bottom: "fc8_triplet"
-  top: "fc9_triplet"
-  name: "fc9.1_triplet"
-  type: "InnerProduct"
-  param {
-    name: "ip9_triplet_w"
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    name: "ip9_triplet_b"
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 2048
-    weight_filler {
-      type: "gaussian"
-      std: 0.005
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.0
-    }
-  }
-}
-layer {
-  name: "concat_fc9"
-  bottom: "fc9_triplet"
-  bottom: "fc7_cc"
-  top: "fc9_id"
-  type: "Concat"
-  concat_param {
-    concat_dim: 1
-  }
-}
-
-
-## class & color ###################################################################
-layer {
-  bottom: "fc7_cc"
-  top: "fc8_class"
-  name: "fc8_class"
-  type: "InnerProduct"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 250
-    weight_filler {
-      type: "gaussian"
-      std: 0.001
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.0
-    }
-  }
-}
-
-layer {
-  bottom: "fc7_cc"
-  top: "fc8_color"
-  name: "fc8_color"
-  type: "InnerProduct"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 7
-    weight_filler {
-      type: "gaussian"
-      std: 0.001
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.0
-    }
-  }
-}
-
-layer {
-  bottom: "fc9_id"
-  top: "fc10_id"
-  name: "fc10_id"
-  type: "InnerProduct"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 16675
-    weight_filler {
-      type: "gaussian"
-      std: 0.001
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.0
-    }
-  }
-}
-
