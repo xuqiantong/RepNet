@@ -8,12 +8,18 @@ import caffe
 import numpy as np
 from scipy import spatial
 
-caffe.set_device(0)
+caffe.set_device(0) 
 caffe.set_mode_gpu()
-net = caffe.Net('/home/xqt/exp/deploy_v2_cmp.prototxt',
-                '/home/xqt/essence/v2_cmp_iter_203510.caffemodel',
+net = caffe.Net('/home/xqt/exp/deploy_v5.prototxt', 
+                # '/home/xqt/exp/deploy_v2_cmp.prototxt'
+                # '/home/xqt/exp/deploy_v6.prototxt'
+                #  deploy_v5
+                '/home/xqt/exp_res/v5_iter_175610.caffemodel', 
+                # '/home/xqt/essence/v2_cmp_iter_203510.caffemodel'
+                # '/home/xqt/exp_res/v6_iter_296864.caffemodel'
+                # v5_iter_175610
                 caffe.TEST)
-print '\nLoaded network {:s}'.format('v2_cmp_iter_203510.caffemodel')
+print '\nLoaded network {:s}'.format('v6_iter_296864.caffemodel')
 
 in_ = net.inputs[0]
 in_shape = net.blobs[in_].data.shape
@@ -23,11 +29,11 @@ transformer.set_raw_scale(in_, 255)
 transformer.set_channel_swap(in_, (2, 1, 0))
 
 f_sls1 = np.zeros([78982, 2048], dtype=np.float32)
-f_sls2 = np.zeros([78982, 1024], dtype=np.float32)
+f_sls2 = np.zeros([78982, 1000], dtype=np.float32)
 cnt = 0
 
 img_dir = '/media/mmr6-home/lhy/Documents/Data/Vehicles/vehicles_with_plate/cropped_uncovered/'
-out_path = '/home/xqt/asd/cos_dis_v2_cmp.dis'
+out_path = '/home/xqt/asd/cos_dis_v6.dis'
 with open('/home/xqt/exp/list.txt', 'r') as imglist:
     with open(out_path, 'w') as bcpath:
         for f in imglist:
@@ -41,18 +47,29 @@ with open('/home/xqt/exp/list.txt', 'r') as imglist:
                                                                 (in_shape[2], in_shape[3])))
             out = net.forward_all(**{in_: input_.reshape((1, 3, in_shape[2], in_shape[3]))})
 
-            feat_cc = net.blobs['fc7_cc'].data[0].flatten() 
-            feat = net.blobs['fc7_org'].data[0].flatten()
+            f_sls1[cnt] = net.blobs['fc7_org'].data[0].flatten() 
+            f_sls2[cnt] = net.blobs['fc8_triplet'].data[0].flatten()
             
             #cos_dis = spatial.distance.cosine(feat_cc, feat)
-
             #bcpath.write(str(cos_dis) + '\n')
-            #counter = counter+1
-            if counter%100 == 0:
-                print 'writing %(counter)d %(fn)s' % {"counter":counter, "fn":f.strip()}
-            
-            cnt += 1
-print('Feature extraction cost %.2f s' % (time.time()-start))
+
+            cnt = cnt+1
+            if cnt%100 == 0:
+                print 'writing %(counter)d %(fn)s' % {"counter":cnt, "fn":f.strip()}
+            #print 'feat len: %d' % len(feat)
+            #break
+print('Feature extraction done')
+
+
+from sklearn.cross_decomposition import CCA
+from scipy.stats.stats import pearsonr
+cca = CCA(n_components=1)
+cca.fit(f_sls1, f_sls2)
+X_c, Y_c = cca.transform(f_sls1, f_sls2)
+X_c = X_c.reshape(78982).tolist()
+Y_c = Y_c.reshape(78982).tolist()
+d = pearsonr(X_c, Y_c)
+print d
 
 
 # v2_cmp, f_sls1 | f_sls2 : 0.99858308591425904
